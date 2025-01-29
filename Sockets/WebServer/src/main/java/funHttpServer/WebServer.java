@@ -297,7 +297,85 @@ class WebServer {
                   builder.append("<html><body><h1>Error: Unable to fetch or parse the GitHub data.</h1></body></html>");
               }
 
-        } else {
+        } else if (request.contains("convert?")) {
+            // Get query parameters
+            Map<String, String> query_pairs = splitQuery(request.replace("convert?", ""));
+            String valueStr = query_pairs.get("value");
+            String unit = query_pairs.get("unit");
+
+            try {
+                // Validate and parse input
+                if (valueStr == null || unit == null) {
+                    throw new IllegalArgumentException("Missing required parameters: value and unit");
+                }
+
+                double value = Double.parseDouble(valueStr);
+                double result;
+
+                // Check for unit and perform conversion
+                if (unit.equalsIgnoreCase("celsius")) {
+                    result = (value * 9 / 5) + 32; // Convert to Fahrenheit
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append("Converted: ").append(value).append(" Celsius is ").append(result).append(" Fahrenheit.");
+                } else if (unit.equalsIgnoreCase("fahrenheit")) {
+                    result = (value - 32) * 5 / 9; // Convert to Celsius
+                    builder.append("HTTP/1.1 200 OK\n");
+                    builder.append("Content-Type: text/html; charset=utf-8\n");
+                    builder.append("\n");
+                    builder.append("Converted: ").append(value).append(" Fahrenheit is ").append(result).append(" Celsius.");
+                } else {
+                    throw new IllegalArgumentException("Invalid unit. Use 'celsius' or 'fahrenheit'.");
+                }
+            } catch (NumberFormatException e) {
+                builder.append("HTTP/1.1 406 Not Acceptable\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Error: Invalid value format. Please provide a valid number.");
+            } catch (IllegalArgumentException e) {
+                builder.append("HTTP/1.1 400 Bad Request\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Error: " + e.getMessage());
+            } catch (Exception e) {
+                builder.append("HTTP/1.1 500 Internal Server Error\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("An unexpected error occurred: " + e.getMessage());
+            }
+
+        } else if (request.contains("reverse?")) {
+            // Get query parameter
+            Map<String, String> query_pairs = splitQuery(request.replace("reverse?", ""));
+            String inputStr = query_pairs.get("string");
+
+            try {
+                // Validate input
+                if (inputStr == null || inputStr.isEmpty()) {
+                    throw new IllegalArgumentException("Missing or empty 'string' parameter");
+                }
+
+                // Reverse the string
+                String reversedStr = new StringBuilder(inputStr).reverse().toString();
+
+                builder.append("HTTP/1.1 200 OK\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Reversed string: ").append(reversedStr).append("\n");
+
+            } catch (IllegalArgumentException e) {
+                builder.append("HTTP/1.1 400 Bad Request\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("Error: " + e.getMessage());
+            } catch (Exception e) {
+                builder.append("HTTP/1.1 500 Internal Server Error\n");
+                builder.append("Content-Type: text/html; charset=utf-8\n");
+                builder.append("\n");
+                builder.append("An unexpected error occurred: " + e.getMessage());
+            }
+          } else {
           // if the request is not recognized at all
 
           builder.append("HTTP/1.1 400 Bad Request\n");
