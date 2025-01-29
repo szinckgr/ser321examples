@@ -1,7 +1,13 @@
-// set as java application
 apply plugin: 'application'
 
-//define main class
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.8.8'
+}
+
 mainClassName = 'SimpleServer'
 
 task SimpleWebServer(type: JavaExec) {
@@ -9,7 +15,6 @@ task SimpleWebServer(type: JavaExec) {
   description 'Simple Http Demo'
 
   classpath = sourceSets.main.runtimeClasspath
-
   main = 'httpServer.WebServer'
   standardInput = System.in
 }
@@ -19,9 +24,6 @@ task FunWebServer(type: JavaExec) {
   description 'Simple Http Demo'
 
   classpath = sourceSets.main.runtimeClasspath
-
   main = 'funHttpServer.WebServer'
   standardInput = System.in
 }
-
-
