@@ -1,15 +1,25 @@
-<html>
-	<head>
-		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
-	</head>
-	<body>
-		<h3>You can make the following GET requests<h3>
-		<ul>
-			<li>/file/sample.html -- returns the content of the file sample.html</li>
-			<li>/json -- returns a json of the /random request</a></li>
-			<li>/random -- returns index.html</a></li>
-		</ul>
-		<h3>File Structure in www (you can use /file/www/FILENAME):</h3>
-		${links}
-	</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Welcome to the Fun Web Server!</title>
+	<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+</head>
+<body>
+<h3>You can make the following GET requests:</h3>
+<ul>
+	<li>/file/sample.html -- returns the content of the file sample.html</li>
+	<li>/json -- returns a JSON response of the /random request</li>
+	<li>/random -- returns index.html</li>
+	<li><strong>/convert?value=25&unit=celsius</strong> - Converts temperature (Celsius to Fahrenheit)
+		(<a href="/convert?value=25&unit=celsius">Test</a>)</li>
+	<li><strong>/reverse?string=hello</strong> - Reverses the input string
+		(<a href="/reverse?string=hello">Test</a>)</li>
+	<li><strong>/distance?x1=0&y1=0&x2=3&y2=4</strong> - Calculates the Euclidean distance between two points
+		(<a href="/distance?x1=0&y1=0&x2=3&y2=4">Test</a>)</li>
+</ul>
+<h3>File Structure in www (you can use /file/www/FILENAME):</h3>
+${links}
+</body>
 </html>
